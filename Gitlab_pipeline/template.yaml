@@ -1,0 +1,11 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: A sample AWS SAM template for a Java-based Lambda function
+
+Resources:
+  MyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.example.Main::handleRequest
+      Runtime: java11
+      CodeUri: ./

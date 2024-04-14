@@ -1,0 +1,39 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  AWS_DEFAULT_REGION: "us-east-1"
+  SAM_BUCKET_NAME: "your-sam-bucket"
+
+build:
+  stage: build
+  image: gradle:jdk11
+  script:
+    - gradle build
+
+test:
+  stage: test
+  image: gradle:jdk11
+  script:
+    - gradle test
+
+deploy_lambda:
+  stage: deploy
+  image: public.ecr.aws/sam/build-image-java11:latest
+  script:
+    - sam build
+    - sam deploy --stack-name my-lambda-stack --s3-bucket $SAM_BUCKET_NAME --capabilities CAPABILITY_IAM
+
+deploy_ecs:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t my-ecs-image .
+    - docker tag my-ecs-image:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/my-ecs-repo:latest
+    - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/my-ecs-repo:latest
+    - ecs-cli compose --project-name my-ecs-service --file docker-compose.yml service up
