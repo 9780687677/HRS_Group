@@ -1,0 +1,18 @@
+Make sure you have Python 3.8 or later installed.
+
+Install Pipenv if you haven't already:
+pip install pipenv
+git clone <repository-url>
+cd redis-s3-exporter
+pipenv --python 3.8
+pipenv install
+Update the exporter.py script with your ElastiCache endpoint, Redis key name, and S3 bucket name.
+Usage
+Run the exporter script using Pipenv:
+pipenv run python exporter.py
+Packaging and Deployment
+Create a Pipfile to manage dependencies:
+pipenv lock
+Create a setup.py file for packaging:
+pipenv run python setup.py sdist bdist_wheel
+Deploy the packaged tool to a managed cloud environment, such as AWS Lambda or AWS Elastic Beanstalk.

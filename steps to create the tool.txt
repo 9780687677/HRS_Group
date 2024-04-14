@@ -1,0 +1,23 @@
+***************Setup Python Environment***********
+Install Pipenv if you haven't already:
+
+###########bash########
+Copy code
+pip install pipenv
+Create a new directory for your project and navigate into it:
+
+##############bash############
+Copy code
+mkdir redis-s3-exporter
+cd redis-s3-exporter
+Initialize a new Pipenv environment:
+
+############bash################
+Copy code
+pipenv --python 3.8
+Step 2: Install Required Packages
+Install the necessary packages:
+
+###############bash###############
+Copy code
+pipenv install boto3 redis
